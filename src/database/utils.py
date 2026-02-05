@@ -14,7 +14,7 @@ def _is_sqlite_url(url: str) -> bool:
 def get_database_url() -> str:
     return os.getenv("DATABASE_URL", "sqlite:///./local.db")
 
-def create_new_engine(db_url: str = None, *, echo: bool = False):
+def create_new_engine(db_url: str | None = None, *, echo: bool = False):
     url = db_url or get_database_url()
     if _is_sqlite_url(url):
         return create_engine(

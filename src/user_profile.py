@@ -1,7 +1,8 @@
 from dataclasses import dataclass, asdict
+from typing import Optional
+
 from sqlalchemy import select
 from sqlalchemy.engine import Engine
-from typing import Optional
 
 from src.database.utils import get_engine
 from src.database.models import user_profiles
@@ -28,7 +29,10 @@ class UserProfile:
         with engine.begin() as conn:
             if self.id is None:
                 result = conn.execute(user_profiles.insert().values(data=self.to_dict()))
-                self.id = result.inserted_primary_key[0]
+                inserted = result.inserted_primary_key
+                if not inserted:
+                    raise RuntimeError("Failed to insert user profile")
+                self.id = inserted[0]
             else:
                 conn.execute(
                     user_profiles.update()
@@ -38,8 +42,8 @@ class UserProfile:
         return self.id
 
     @classmethod
-    def load(cls, profile_id: int, engine: Engine | None = None) -> "UserProfile":
-        engine = engine or get_engine()
+    def load(cls, profile_id: int) -> "UserProfile":
+        engine = get_engine()
         with engine.connect() as conn:
             row = conn.execute(
                 select(user_profiles.c.data).where(user_profiles.c.id == profile_id)

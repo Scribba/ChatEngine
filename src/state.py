@@ -1,9 +1,8 @@
-from typing import TypedDict, Any
+from typing import TypedDict, Any, NotRequired
 
-from src.user_profile import UserProfile
 
 
 class ConversationState(TypedDict):
     messages: list
-    user_profile: UserProfile
-    response: str
+    user_profile: dict[str, Any]
+    response: NotRequired[str]

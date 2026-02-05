@@ -1,5 +1,5 @@
-from dataclasses import dataclass
-from typing import Optional
+from dataclasses import dataclass, field
+from typing import Any, Optional
 from datetime import datetime
 
 from sqlalchemy import select
@@ -14,19 +14,17 @@ from src.user_profile import UserProfile
 class Conversation:
     user_id: int
     id: Optional[int] = None
-    data: dict = None
+    data: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
-        if self.data is None:
-            self.data = {}
         if "messages" not in self.data:
             self.data["messages"] = []
 
-    def to_dict(self):
+    def to_dict(self) -> dict[str, Any]:
         return self.data
 
     @classmethod
-    def from_dict(cls, user_id: int, data: dict, id: Optional[int] = None):
+    def from_dict(cls, user_id: int, data: dict[str, Any], id: Optional[int] = None):
         return cls(user_id=user_id, data=data, id=id)
 
     def save(self) -> int:

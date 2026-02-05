@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Any
+
 from dotenv import load_dotenv
 
 from fastapi import FastAPI, HTTPException, Query
@@ -61,7 +62,7 @@ class SendMessageResponse(BaseModel):
     messages: list[MessageResponse]
 
 
-app = FastAPI(title="RAG Chat API", version="1.0.0")
+app = FastAPI(title="Chat API", version="1.0.0")
 
 
 @app.on_event("startup")
@@ -88,6 +89,7 @@ def get_user(user_id: int) -> UserResponse:
         profile = UserProfile.load(user_id)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+    assert profile.id is not None
     return UserResponse(id=profile.id, name=profile.name)
 
 
