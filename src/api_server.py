@@ -13,7 +13,7 @@ from src.database.utils import get_engine, init_engine
 from src.user_profile import UserProfile
 
 
-load_dotenv("/Users/wnowogor/PycharmProjects/rag/.env")
+load_dotenv(".env")
 
 
 class UserCreate(BaseModel):

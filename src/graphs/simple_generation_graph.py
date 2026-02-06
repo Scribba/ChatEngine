@@ -1,4 +1,4 @@
-from typing import Any, cast
+from typing import Any
 
 from langgraph.graph import START, END, StateGraph
 from langchain.chat_models import init_chat_model
@@ -23,5 +23,10 @@ class SimpleGenerationGraph(BaseGraph):
 
     def invoke(self, messages: list[dict[str, str]], user_profile: dict[str, Any]) -> str:
         initial_state = ConversationState(messages=messages, user_profile=user_profile)
-        result = cast(dict[str, Any], self.graph.invoke(initial_state))
-        return cast(str, result["response"])
+        result = self.graph.invoke(initial_state)
+        if not isinstance(result, dict):
+            raise ValueError("Graph invocation returned an invalid response.")
+        response = result.get("response")
+        if not isinstance(response, str):
+            raise ValueError("Graph response payload is missing a response string.")
+        return response
