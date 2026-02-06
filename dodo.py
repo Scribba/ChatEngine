@@ -180,7 +180,7 @@ def task_coverage() -> Dict[str, object]:
 
 def task_mypy() -> Dict[str, object]:
     return {
-        "actions": ["uv run mypy ."],
+        "actions": ["uv run mypy src/"],
         "verbosity": 2,
         "doc": "Run mypy type checks",
     }
