@@ -23,8 +23,7 @@ dev = [
     "pre-commit>=3.7",
     "types-requests>=2.32.0",
     "doit>=0.36",
-    "pytest>=8.0",
-    "coverage>=7.4",
+    "pytest-cov>=7.0.0",
 ]
 
 [tool.mypy]
